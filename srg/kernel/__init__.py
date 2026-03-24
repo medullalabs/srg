@@ -1,0 +1,1 @@
+"""SRG kernel — execution primitives."""
