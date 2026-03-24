@@ -22,3 +22,4 @@ class GraphExecutionResult(BaseModel):
     outputs: dict[str, Any] = Field(default_factory=dict)
     node_results: list[NodeExecutionResult] = Field(default_factory=list)
     error: str | None = None
+    evidence_summary: dict[str, Any] | None = None

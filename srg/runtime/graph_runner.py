@@ -15,6 +15,7 @@ from srg.models.graph import ReasoningGraph
 from srg.models.node import NodeKind, ReasoningNode, RetryPolicy
 from srg.models.result import GraphExecutionResult, NodeExecutionResult
 from srg.runtime.deterministic_registry import DeterministicRegistry
+from srg.runtime.evidence_aggregator import aggregate_evidence
 from srg.runtime.graph_validator import validate_graph
 from srg.runtime.planner import compute_execution_order
 
@@ -98,22 +99,28 @@ def run_graph(
         node_results.append(result)
 
         if result.status == "failure":
+            summary = aggregate_evidence(node_results)
+            summary.pop("evidence_records", None)
             return GraphExecutionResult(
                 graph_name=graph.name,
                 status="failure",
                 node_results=node_results,
                 outputs=state,
                 error=f"Node '{node_id}' failed: {result.error}",
+                evidence_summary=summary,
             )
 
         # merge outputs into state
         state.update(result.outputs)
 
+    summary = aggregate_evidence(node_results)
+    summary.pop("evidence_records", None)
     return GraphExecutionResult(
         graph_name=graph.name,
         status="success",
         node_results=node_results,
         outputs=state,
+        evidence_summary=summary,
     )
 
 

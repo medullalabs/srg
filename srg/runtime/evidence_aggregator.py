@@ -32,10 +32,16 @@ def aggregate_evidence(
             # deterministic nodes with no evidence still count as 1 attempt
             total_attempts += 1
 
+    total_duration_ms = round(
+        sum(nr.duration_ms for nr in node_results if nr.duration_ms is not None),
+        2,
+    )
+
     return {
         "total_nodes": total_nodes,
         "passed": passed,
         "failed": failed,
         "total_attempts": total_attempts,
+        "total_duration_ms": total_duration_ms,
         "evidence_records": all_evidence,
     }
