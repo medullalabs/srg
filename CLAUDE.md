@@ -58,6 +58,23 @@ When interacting with GitHub (issues, PRs, repos, etc.), prefer tools in this or
 2. **gh CLI** (`gh issue list`, `gh pr create`, etc.)
 3. **gh API** (`gh api repos/...`) — only as a last resort
 
+## Ruthless Review Rubric
+
+`SRG_RUTHLESS_REVIEW_RUBRIC.md` defines 8 evaluation categories (0/1/2 each, 16 max) that determine whether SRG is a real semantic IR or just Python in disguise. Every feature, PR, and design decision should be evaluated against this rubric. The categories:
+
+1. **Structural Editability** — Is changing reasoning structure easier in SRG than Python?
+2. **Semantic Diff Superiority** — Does `semantic_diff()` beat `git diff` on Python?
+3. **Agent Editability** — Can LLMs modify SRG more reliably than Python?
+4. **Contract Discipline** — Are contracts first-class and consistently enforced?
+5. **Composability** — Can reasoning graphs be composed cleanly?
+6. **Evidence Usefulness** — Does evidence materially improve debugging?
+7. **Narrowness Discipline** — Does SRG stay within its defined scope?
+8. **Use-Case Undeniability** — Is there a domain where SRG is clearly superior?
+
+**Threshold:** 13+ = real advantage, 9-12 = promising, 5-8 = convenience wrapper, 0-4 = unjustified.
+
+SRG is justified only if it proves: *reasoning structure is a better authoring and modification surface than Python for a meaningful class of systems.* If not, it should collapse back into a simpler library around agentic execution primitives.
+
 ## Schema References
 
 - `srg/schemas/graph.schema.json` — JSON Schema for graph declarations
