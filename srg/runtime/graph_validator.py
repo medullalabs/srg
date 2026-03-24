@@ -24,8 +24,9 @@ def validate_graph(graph: ReasoningGraph) -> ValidationResult:
             errors.append(f"Duplicate node ID: {node.id}")
         seen_ids.add(node.id)
 
-    # Check edges reference existing nodes
+    # Check edges reference existing nodes and valid ports
     node_ids = {node.id for node in graph.nodes}
+    node_map = {node.id: node for node in graph.nodes}
     for edge in graph.edges:
         if edge.from_node not in node_ids:
             errors.append(
@@ -35,6 +36,26 @@ def validate_graph(graph: ReasoningGraph) -> ValidationResult:
             errors.append(
                 f"Edge references non-existent node: {edge.to_node}"
             )
+
+        # Validate from_output against source node's outputs
+        if edge.from_output and edge.from_node in node_map:
+            source = node_map[edge.from_node]
+            if source.outputs and edge.from_output not in source.outputs:
+                errors.append(
+                    f"Edge {edge.from_node}->{edge.to_node}: "
+                    f"from_output '{edge.from_output}' not in "
+                    f"{edge.from_node}'s outputs {source.outputs}"
+                )
+
+        # Validate to_input against target node's inputs
+        if edge.to_input and edge.to_node in node_map:
+            target = node_map[edge.to_node]
+            if target.inputs and edge.to_input not in target.inputs:
+                errors.append(
+                    f"Edge {edge.from_node}->{edge.to_node}: "
+                    f"to_input '{edge.to_input}' not in "
+                    f"{edge.to_node}'s inputs {target.inputs}"
+                )
 
     # Check agentic nodes have output_schema
     for node in graph.nodes:
