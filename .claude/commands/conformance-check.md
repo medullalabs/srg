@@ -11,9 +11,9 @@ Run the full test suite to establish a baseline:
 .venv/bin/mypy srg/
 ```
 
-### Step 2: Spec Conformance (`srg_conformance_v0_3.md`)
+### Step 2: Spec Conformance (`docs/srg_conformance_v0_3.md`)
 
-Read `srg_conformance_v0_3.md` and evaluate each section against the current codebase. For each requirement:
+Read `docs/srg_conformance_v0_3.md` and evaluate each section against the current codebase. For each requirement:
 
 1. Read the relevant source code to verify the requirement is met
 2. Check if tests exist that enforce the requirement
@@ -35,9 +35,9 @@ Group results by section:
 
 Calculate: total MUST requirements passed, total SHOULD requirements passed, overall conformance verdict per Section 14.
 
-### Step 3: Ruthless Review Rubric (`SRG_RUTHLESS_REVIEW_RUBRIC.md`)
+### Step 3: Ruthless Review Rubric (`docs/SRG_RUTHLESS_REVIEW_RUBRIC.md`)
 
-Read `SRG_RUTHLESS_REVIEW_RUBRIC.md` and score all 8 categories (0/1/2 each):
+Read `docs/SRG_RUTHLESS_REVIEW_RUBRIC.md` and score all 8 categories (0/1/2 each):
 
 1. **Structural Editability** — Check example graphs, test cases for add/remove/rewire operations
 2. **Semantic Diff Superiority** — Check `semantic_diff()` implementation and test coverage
@@ -60,7 +60,7 @@ For each category, cite specific files and test results as evidence.
 - ruff: {status}
 - mypy: {status}
 
-### Spec Conformance (`srg_conformance_v0_3.md`)
+### Spec Conformance (`docs/srg_conformance_v0_3.md`)
 | Section | Requirement | Status | Evidence |
 |---------|-------------|--------|----------|
 
@@ -68,7 +68,7 @@ For each category, cite specific files and test results as evidence.
 **SHOULD requirements:** {passed}/{total}
 **Verdict:** {CONFORMANT / NON-CONFORMANT} per Section 14
 
-### Ruthless Review Rubric (`SRG_RUTHLESS_REVIEW_RUBRIC.md`)
+### Ruthless Review Rubric (`docs/SRG_RUTHLESS_REVIEW_RUBRIC.md`)
 | # | Category | Score | Evidence | To Improve |
 |---|----------|-------|----------|------------|
 

@@ -2,7 +2,7 @@
 
 ## Spec Alignment Rules
 
-All contributions to SRG MUST conform to the v0.3 specification (`srg_spec_v0_3.md`). The following rules are non-negotiable:
+All contributions to SRG MUST conform to the v0.3 specification (`docs/srg_spec_v0_3.md`). The following rules are non-negotiable:
 
 ### What SRG is
 

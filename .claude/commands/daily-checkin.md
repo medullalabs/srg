@@ -34,7 +34,7 @@ For each milestone, report:
 
 ### Step 4: Rubric Score
 
-Read `SRG_RUTHLESS_REVIEW_RUBRIC.md` and score the current state of the codebase against all 8 categories (0/1/2 each). For each category:
+Read `docs/SRG_RUTHLESS_REVIEW_RUBRIC.md` and score the current state of the codebase against all 8 categories (0/1/2 each). For each category:
 
 1. Check what evidence exists in the codebase (tests, examples, implementations)
 2. Assign a score based on the rubric's pass/fail criteria
@@ -71,5 +71,5 @@ Top 3 issues to work on next, with reasoning based on:
 - Rubric score impact (what moves the score toward 13+)
 - Dependency chain impact (what unblocks the most downstream work)
 - Milestone priority (earlier milestones first)
-- Spec conformance (`srg_spec_v0_3.md` and `srg_conformance_v0_3.md`)
+- Spec conformance (`docs/srg_spec_v0_3.md` and `docs/srg_conformance_v0_3.md`)
 ```

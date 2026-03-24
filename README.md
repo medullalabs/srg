@@ -96,4 +96,4 @@ mypy srg/
 
 ## Specification
 
-See `srg_spec_v0_3.md` for the full specification and `srg_conformance_v0_3.md` for the conformance checklist.
+See `docs/srg_spec_v0_3.md` for the full specification and `docs/srg_conformance_v0_3.md` for the conformance checklist.

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-SRG (Semantic Reasoning Graph) is a **semantic IR for reasoning structure** — not a workflow engine, not an adapter marketplace, not an orchestration framework. It describes reasoning-centric computation as typed nodes connected by explicit data-flow edges, layered over a contract-enforced agentic execution kernel. The north-star spec is `srg_spec_v0_3.md`.
+SRG (Semantic Reasoning Graph) is a **semantic IR for reasoning structure** — not a workflow engine, not an adapter marketplace, not an orchestration framework. It describes reasoning-centric computation as typed nodes connected by explicit data-flow edges, layered over a contract-enforced agentic execution kernel. The north-star spec is `docs/srg_spec_v0_3.md`.
 
 ## Commands
 
@@ -31,7 +31,7 @@ mypy srg/                     # Type check (strict mode, pydantic plugin)
 
 ## Spec Conformance Rules
 
-All code MUST conform to `srg_spec_v0_3.md` and pass `srg_conformance_v0_3.md`. Key invariants:
+All code MUST conform to `docs/srg_spec_v0_3.md` and pass `docs/srg_conformance_v0_3.md`. Key invariants:
 
 - **Agentic nodes MUST have `contracts` and `output_schema`.** The graph validator rejects violations.
 - **All edges MUST be explicit.** No implicit dependency inference.
@@ -48,7 +48,7 @@ These will fail CI if violated:
 - `NodeKind` must only have `DETERMINISTIC` and `AGENTIC`
 - `ReasoningNode` must not have `transform` or `adapter` fields
 
-Do NOT add features that drift toward orchestration, reactive streams, adapter ecosystems, or infrastructure concerns. If in doubt, re-read Section 2 (Scope) of `srg_spec_v0_3.md`.
+Do NOT add features that drift toward orchestration, reactive streams, adapter ecosystems, or infrastructure concerns. If in doubt, re-read Section 2 (Scope) of `docs/srg_spec_v0_3.md`.
 
 ## GitHub Tool Preference
 
@@ -60,7 +60,7 @@ When interacting with GitHub (issues, PRs, repos, etc.), prefer tools in this or
 
 ## Ruthless Review Rubric
 
-`SRG_RUTHLESS_REVIEW_RUBRIC.md` defines 8 evaluation categories (0/1/2 each, 16 max) that determine whether SRG is a real semantic IR or just Python in disguise. Every feature, PR, and design decision should be evaluated against this rubric. The categories:
+`docs/SRG_RUTHLESS_REVIEW_RUBRIC.md` defines 8 evaluation categories (0/1/2 each, 16 max) that determine whether SRG is a real semantic IR or just Python in disguise. Every feature, PR, and design decision should be evaluated against this rubric. The categories:
 
 1. **Structural Editability** — Is changing reasoning structure easier in SRG than Python?
 2. **Semantic Diff Superiority** — Does `semantic_diff()` beat `git diff` on Python?
@@ -79,4 +79,4 @@ SRG is justified only if it proves: *reasoning structure is a better authoring a
 
 - `srg/schemas/graph.schema.json` — JSON Schema for graph declarations
 - `srg/schemas/evidence.schema.json` — JSON Schema for evidence records
-- `srg_schema_v0_1.md` — Canonical schema specification for the MVP
+- `docs/srg_schema_v0_1.md` — Canonical schema specification for the MVP
