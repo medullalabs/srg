@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://srg.dev/schemas/graph.schema.json",
+  "title": "ReasoningGraph",
+  "description": "Schema for a Semantic Reasoning Graph declaration.",
+  "type": "object",
+  "required": ["name", "nodes", "edges"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique name of the reasoning graph."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Human-readable description of the graph."
+    },
+    "version": {
+      "type": ["string", "null"],
+      "description": "Version of the graph definition."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Arbitrary metadata.",
+      "default": {}
+    },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ReasoningNode" },
+      "minItems": 1
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ReasoningEdge" }
+    }
+  },
+  "$defs": {
+    "RetryPolicy": {
+      "type": "object",
+      "properties": {
+        "max_attempts": {
+          "type": "integer",
+          "default": 2
+        },
+        "retry_on": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["schema_failure", "contract_failure"]
+        }
+      }
+    },
+    "ReasoningNode": {
+      "type": "object",
+      "required": ["id", "kind", "inputs", "outputs"],
+      "properties": {
+        "id": { "type": "string" },
+        "kind": {
+          "type": "string",
+          "enum": ["deterministic", "agentic"]
+        },
+        "inputs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "outputs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "description": { "type": ["string", "null"] },
+        "function_ref": { "type": ["string", "null"] },
+        "prompt_template": { "type": ["string", "null"] },
+        "output_schema": {
+          "type": ["object", "null"],
+          "description": "JSON Schema for agentic node output. Required for agentic nodes."
+        },
+        "contracts": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        },
+        "effects": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        },
+        "retry_policy": {
+          "oneOf": [
+            { "$ref": "#/$defs/RetryPolicy" },
+            { "type": "null" }
+          ]
+        },
+        "metadata": {
+          "type": "object",
+          "default": {}
+        }
+      }
+    },
+    "ReasoningEdge": {
+      "type": "object",
+      "required": ["from_node", "to_node"],
+      "properties": {
+        "from_node": { "type": "string" },
+        "to_node": { "type": "string" },
+        "from_output": { "type": ["string", "null"] },
+        "to_input": { "type": ["string", "null"] },
+        "kind": {
+          "type": "string",
+          "default": "data_flow"
+        }
+      }
+    }
+  }
+}

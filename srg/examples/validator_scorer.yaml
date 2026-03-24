@@ -1,0 +1,43 @@
+name: validator_scorer
+description: Validate input data and score it using an agentic reasoning step.
+version: "0.1.0"
+
+nodes:
+  - id: validate_input
+    kind: deterministic
+    inputs: [raw_data]
+    outputs: [validated_data]
+    description: Validate and normalize input data.
+    function_ref: validate_input_fn
+
+  - id: score_data
+    kind: agentic
+    inputs: [validated_data]
+    outputs: [score, explanation]
+    description: Score the validated data using LLM reasoning.
+    prompt_template: |
+      Given the following validated data, provide a quality score
+      between 0 and 100 and a brief explanation.
+      Data: {validated_data}
+    output_schema:
+      type: object
+      properties:
+        score:
+          type: number
+          minimum: 0
+          maximum: 100
+        explanation:
+          type: string
+      required: [score, explanation]
+    contracts:
+      - score >= 0
+      - score <= 100
+      - explanation is nonempty
+    retry_policy:
+      max_attempts: 2
+      retry_on: [schema_failure, contract_failure]
+
+edges:
+  - from_node: validate_input
+    to_node: score_data
+    kind: data_flow
