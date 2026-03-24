@@ -20,7 +20,7 @@ def load_graph(path: str | Path) -> ReasoningGraph:
     if not file_path.exists():
         raise LoadError(f"File not found: {file_path}")
 
-    if not file_path.suffix in (".yaml", ".yml"):
+    if file_path.suffix not in (".yaml", ".yml"):
         raise LoadError(f"Unsupported file type: {file_path.suffix}")
 
     try:

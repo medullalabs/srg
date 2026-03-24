@@ -1,0 +1,51 @@
+name: repo_risk
+description: Assess repository risk from code metrics
+version: "0.1"
+
+nodes:
+  - id: gather_metrics
+    kind: deterministic
+    inputs: [repo_path]
+    outputs: [metrics]
+    function_ref: gather_metrics
+
+  - id: assess_risk
+    kind: agentic
+    inputs: [metrics]
+    outputs: [risk_level, risk_factors]
+    prompt_template: |
+      Assess the risk level of this repository based on the provided metrics.
+      Metrics: {metrics}
+      Return a risk_level (low/medium/high/critical) and list of risk_factors.
+    output_schema:
+      type: object
+      required: [risk_level, risk_factors]
+      properties:
+        risk_level:
+          type: string
+          enum: [low, medium, high, critical]
+        risk_factors:
+          type: array
+          items:
+            type: string
+    contracts:
+      - risk_level is nonempty
+      - risk_factors is nonempty
+    effects:
+      - invoke_model
+      - emit_evidence
+    retry_policy:
+      max_attempts: 2
+      retry_on: [schema_failure, contract_failure]
+
+  - id: format_report
+    kind: deterministic
+    inputs: [risk_level, risk_factors]
+    outputs: [report]
+    function_ref: format_report
+
+edges:
+  - from_node: gather_metrics
+    to_node: assess_risk
+  - from_node: assess_risk
+    to_node: format_report
