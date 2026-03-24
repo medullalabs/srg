@@ -1,0 +1,159 @@
+name: subnet_scorer
+description: >
+  5-factor subnet scoring kernel from subnet-scorer-worker.
+  Scores mechanism design, network effects, team quality,
+  economic sustainability, and technical innovation with
+  weighted aggregation.
+version: "0.1"
+
+nodes:
+  - id: extract_features
+    kind: deterministic
+    inputs: [subnet_data]
+    outputs: [mechanism_features, network_features, team_features, economic_features, innovation_features]
+    function_ref: extract_features
+    description: Extract per-factor feature dicts from raw subnet data
+
+  - id: score_mechanism_design
+    kind: deterministic
+    inputs: [mechanism_features]
+    outputs: [mechanism_design_score]
+    function_ref: score_mechanism_design
+    description: >
+      Gini coefficient on validator stakes, participation ratio,
+      and consensus metrics. Weight: 30%.
+    contracts:
+      - mechanism_design_score in 0..100
+
+  - id: score_network_effects
+    kind: deterministic
+    inputs: [network_features]
+    outputs: [network_effects_score]
+    function_ref: score_network_effects
+    description: >
+      Log-scale network size, validator diversity, coldkey
+      concentration penalty, emission activity. Weight: 20%.
+    contracts:
+      - network_effects_score in 0..100
+
+  - id: score_team_quality
+    kind: agentic
+    inputs: [team_features]
+    outputs: [team_quality_score, team_quality_reasoning]
+    description: >
+      LLM-powered assessment of team quality from GitHub metrics.
+      Weight: 15%.
+    prompt_template: |
+      Assess the development team quality for a Bittensor subnet based on
+      the following GitHub metrics:
+      {team_features}
+
+      Score the team from 0 to 100 and provide reasoning.
+      Return JSON with team_quality_score (number 0-100) and
+      team_quality_reasoning (string).
+    output_schema:
+      type: object
+      required: [team_quality_score, team_quality_reasoning]
+      properties:
+        team_quality_score:
+          type: number
+          minimum: 0
+          maximum: 100
+        team_quality_reasoning:
+          type: string
+    contracts:
+      - team_quality_score in 0..100
+      - team_quality_reasoning is nonempty
+    effects:
+      - invoke_model
+      - emit_evidence
+    retry_policy:
+      max_attempts: 2
+      retry_on: [schema_failure, contract_failure]
+
+  - id: score_economic_sustainability
+    kind: deterministic
+    inputs: [economic_features]
+    outputs: [economic_sustainability_score]
+    function_ref: score_economic_sustainability
+    description: >
+      Real emission activity, distribution fairness, price
+      stability, pool liquidity. Weight: 20%.
+    contracts:
+      - economic_sustainability_score in 0..100
+
+  - id: score_technical_innovation
+    kind: agentic
+    inputs: [innovation_features]
+    outputs: [technical_innovation_score, technical_innovation_reasoning]
+    description: >
+      LLM-powered assessment of technical novelty and mechanism
+      uniqueness. Weight: 15%.
+    prompt_template: |
+      Assess the technical innovation of a Bittensor subnet based on
+      the following information:
+      {innovation_features}
+
+      Score the technical innovation from 0 to 100 and provide reasoning.
+      Return JSON with technical_innovation_score (number 0-100) and
+      technical_innovation_reasoning (string).
+    output_schema:
+      type: object
+      required: [technical_innovation_score, technical_innovation_reasoning]
+      properties:
+        technical_innovation_score:
+          type: number
+          minimum: 0
+          maximum: 100
+        technical_innovation_reasoning:
+          type: string
+    contracts:
+      - technical_innovation_score in 0..100
+      - technical_innovation_reasoning is nonempty
+    effects:
+      - invoke_model
+      - emit_evidence
+    retry_policy:
+      max_attempts: 2
+      retry_on: [schema_failure, contract_failure]
+
+  - id: aggregate_scores
+    kind: deterministic
+    inputs:
+      - mechanism_design_score
+      - network_effects_score
+      - team_quality_score
+      - economic_sustainability_score
+      - technical_innovation_score
+    outputs: [overall_score, score_breakdown]
+    function_ref: aggregate_scores
+    description: Weighted average of all 5 factor scores
+    metadata:
+      weights:
+        mechanism_design: 0.30
+        network_effects: 0.20
+        team_quality: 0.15
+        economic_sustainability: 0.20
+        technical_innovation: 0.15
+
+edges:
+  - from_node: extract_features
+    to_node: score_mechanism_design
+  - from_node: extract_features
+    to_node: score_network_effects
+  - from_node: extract_features
+    to_node: score_team_quality
+  - from_node: extract_features
+    to_node: score_economic_sustainability
+  - from_node: extract_features
+    to_node: score_technical_innovation
+  - from_node: score_mechanism_design
+    to_node: aggregate_scores
+  - from_node: score_network_effects
+    to_node: aggregate_scores
+  - from_node: score_team_quality
+    to_node: aggregate_scores
+  - from_node: score_economic_sustainability
+    to_node: aggregate_scores
+  - from_node: score_technical_innovation
+    to_node: aggregate_scores
