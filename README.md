@@ -1,5 +1,10 @@
 # SRG -- Semantic Reasoning Graph
 
+[![PyPI](https://img.shields.io/pypi/v/semantic-reasoning-graph.svg)](https://pypi.org/project/semantic-reasoning-graph/)
+[![Python versions](https://img.shields.io/pypi/pyversions/semantic-reasoning-graph.svg)](https://pypi.org/project/semantic-reasoning-graph/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![CI](https://github.com/medullalabs/semantic-reasoning-graph/actions/workflows/ci.yml/badge.svg)](https://github.com/medullalabs/semantic-reasoning-graph/actions/workflows/ci.yml)
+
 SRG is a **structural safety net for reasoning-centric systems**. It describes computation as typed nodes connected by explicit data-flow edges, with contract-enforced agentic execution and automatic evidence trails. Two node kinds: **deterministic** (pure Python functions) and **agentic** (LLM calls with JSON schema validation, contract checking, and automatic retry).
 
 SRG's value is not making edits easier -- a capable LLM can edit Python equally well. The value is making edits **safer**: structural validation catches bugs (duplicate nodes, invalid edges, cycles, missing schemas) that Python silently accepts. Contracts prevent silent reasoning degradation. Evidence provides automatic, structured debugging without custom logging.
@@ -29,6 +34,12 @@ Systems where **the cost of a silent reasoning bug exceeds the cost of framework
 - Systems that will be iteratively modified (contracts catch regressions)
 - Teams where non-coders need to review reasoning structure
 - Systems that need audit trails without custom logging
+
+## Install
+
+```bash
+pip install semantic-reasoning-graph
+```
 
 ## Quick example
 

@@ -3,9 +3,37 @@ requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "srg"
-version = "0.1.0"
+name = "semantic-reasoning-graph"
+dynamic = ["version"]
+description = "A semantic IR for reasoning structure with contract-enforced agentic execution and automatic evidence trails."
+readme = "README.md"
 requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Medulla Labs", email = "bob@tribit.io"},
+]
+keywords = [
+    "llm",
+    "agents",
+    "reasoning",
+    "semantic-graph",
+    "contracts",
+    "evidence",
+    "ir",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
 dependencies = [
     "pydantic>=2.0",
     "pyyaml>=6.0",
@@ -17,10 +45,26 @@ dev = [
     "mypy>=1.0",
     "ruff>=0.4",
     "types-PyYAML>=6.0",
+    "build>=1.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/medullalabs/semantic-reasoning-graph"
+Repository = "https://github.com/medullalabs/semantic-reasoning-graph"
+Issues = "https://github.com/medullalabs/semantic-reasoning-graph/issues"
+Changelog = "https://github.com/medullalabs/semantic-reasoning-graph/blob/main/CHANGELOG.md"
 
 [project.scripts]
 srg = "srg.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["srg*"]
+exclude = ["tests*", "benchmarks*"]
+
+[tool.setuptools.package-data]
+srg = ["schemas/*.json", "examples/*.yaml", "examples/*.py", "py.typed"]
+
+[tool.setuptools_scm]
 
 [tool.mypy]
 strict = true
