@@ -5,12 +5,12 @@ Perform a daily check-in on the SRG project by reviewing open GitHub issues and 
 ### Step 1: Fetch Issues
 
 **Primary method — GitHub MCP:**
-First, use `ToolSearch` to fetch the `mcp__github__list_issues` tool (it is a deferred tool that must be loaded before use). Then call `mcp__github__list_issues` with `owner: "medullalabs"`, `repo: "srg"`, `state: "OPEN"` to list all open issues.
+First, use `ToolSearch` to fetch the `mcp__github__list_issues` tool (it is a deferred tool that must be loaded before use). Then call `mcp__github__list_issues` with `owner: "medullalabs"`, `repo: "semantic-reasoning-graph"`, `state: "OPEN"` to list all open issues.
 
 **Fallback — gh CLI:**
 If the MCP tools fail or are unavailable, fall back to the `gh` CLI:
 ```
-gh issue list -R medullalabs/srg --state open --limit 50 --json number,title,labels,milestone,assignees,createdAt,updatedAt
+gh issue list -R medullalabs/semantic-reasoning-graph --state open --limit 50 --json number,title,labels,milestone,assignees,createdAt,updatedAt
 ```
 
 ### Step 2: Analyze and Prioritize
